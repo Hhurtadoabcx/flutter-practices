@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
 
 void main() {
   runApp(const MyApp());
@@ -31,6 +32,18 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final List<String> titulosPredefinidos = [
+    'Hawaii ➔ Sevilla',
+    'Sevilla ➔ Monaco',
+    'Geneva ➔ Mexico City',
+    'Atlanta ➔ Marrakech'
+  ];
+
+  String seleccionarTituloAleatorio() {
+    Random random = Random();
+    return titulosPredefinidos[random.nextInt(titulosPredefinidos.length)];
+  }//Esto ea para que los titulos sean random, esto mismo voy hacer para los iconos
+
   List<Widget> _buildCardList(int count) {
     List<Widget> cards = [];
 
@@ -42,7 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
               backgroundColor: Color.fromARGB(115, 209, 88, 138),
               child: Icon(Icons.airplanemode_active, color: Color.fromARGB(255, 223, 5, 96)),
             ),
-            title: Text('Título $i'),
+            title: Text(seleccionarTituloAleatorio()),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -67,19 +80,16 @@ class _MyHomePageState extends State<MyHomePage> {
             title: Text(widget.title),
             leading: IconButton(
               icon: Icon(Icons.menu),
-              onPressed: () {
-              },
+              onPressed: () {},
             ),
             actions: [
               IconButton(
                 icon: Icon(Icons.notifications),
-                onPressed: () {
-                },
+                onPressed: () {},
               ),
               IconButton(
                 icon: Icon(Icons.search),
-                onPressed: () {
-                },
+                onPressed: () {},
               ),
             ],
             centerTitle: true,
