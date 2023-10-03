@@ -39,10 +39,20 @@ class _MyHomePageState extends State<MyHomePage> {
     'Atlanta ➔ Marrakech'
   ];
 
+  IconData seleccionarIconoAleatorio() {
+    Random random = Random();
+    List<IconData> iconos = [
+      Icons.airplanemode_active,
+      Icons.bus_alert,
+      Icons.directions_boat_outlined,
+    ];
+    return iconos[random.nextInt(iconos.length)];
+  }//Use lo mismo que para el titulo
+
   String seleccionarTituloAleatorio() {
     Random random = Random();
     return titulosPredefinidos[random.nextInt(titulosPredefinidos.length)];
-  }//Esto ea para que los titulos sean random, esto mismo voy hacer para los iconos
+  }//Esto es para que los titulos sean random, esto mismo voy hacer para los iconos
 
   List<Widget> _buildCardList(int count) {
     List<Widget> cards = [];
@@ -53,7 +63,10 @@ class _MyHomePageState extends State<MyHomePage> {
           child: ListTile(
             leading: CircleAvatar(
               backgroundColor: Color.fromARGB(115, 209, 88, 138),
-              child: Icon(Icons.airplanemode_active, color: Color.fromARGB(255, 223, 5, 96)),
+              child: Icon(
+                seleccionarIconoAleatorio(),
+                color: Color.fromARGB(255, 223, 5, 96),
+              ),
             ),
             title: Text(seleccionarTituloAleatorio()),
             subtitle: Column(
