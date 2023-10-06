@@ -84,6 +84,79 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return cards;
   }
+  List<Widget> _buildCardList1(int count) {
+  List<Widget> cards1 = [];
+
+  for (int i = 1; i <= count; i++) {
+    cards1.add(
+      Card(
+        color: Colors.transparent, // Establece el color del Card a transparente
+        elevation: 0, // Ajusta la elevación a 0 para que no haya sombra
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0), // Ajusta el radio de borde según tus preferencias
+        ),
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [Colors.blue, Colors.green], // Cambia los colores según tus preferencias
+            ),
+            borderRadius: BorderRadius.all(Radius.circular(15.0)), // Asegura que el borde coincida con el del Card
+          ),
+          child: ListTile(
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Text(
+                    'Title',
+                    textAlign: TextAlign.start,
+                  ),
+                ),
+                Transform.translate(
+                  offset: Offset(0, -120),
+                  child: CircleAvatar(
+                    radius: 20,
+                    backgroundImage: AssetImage('assets/kaguyita.jpg'),
+                  ),
+                ),
+              ],
+            ),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'hola Lorem Ipsum is simply dummy \n text of the printing and typesetting \n industry. Lorem Ipsum has been the industrys\n standard dummy text ever since the 1500s,\n when an unknown printer took a galley of type',
+                ),
+                Row(
+                  children: [
+                    Icon(Icons.star, color: Colors.yellow),
+                    Text(
+                      'Date: 20/23',
+                      textAlign: TextAlign.start,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  return cards1;
+}
+
+
+
+
+
+
+
+
+
 
   @override
   Widget build(BuildContext context) => DefaultTabController(
@@ -116,10 +189,10 @@ class _MyHomePageState extends State<MyHomePage> {
           body: TabBarView(
             children: [
               ListView(
-                children: _buildCardList(10),
+                children: _buildCardList(5),
               ),
               ListView(
-                children: _buildCardList(10),
+                children: _buildCardList1(5),
               ),
             ],
           ),
