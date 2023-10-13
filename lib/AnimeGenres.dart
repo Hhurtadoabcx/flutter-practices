@@ -2,13 +2,43 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
+class Genre {
+  final int id;
+  final String name;
+  final String url;
+  final int count;
+  final String? description;
+  final String? image;
+
+  Genre({
+    required this.id,
+    required this.name,
+    required this.url,
+    required this.count,
+    this.description,
+    this.image,
+  });
+}
+
+class Anime {
+  final int malId;
+  final String name;
+  final String? description;
+
+  Anime({
+    required this.malId,
+    required this.name,
+    this.description,
+  });
+}
+
 class AnimeListByGenre extends StatefulWidget {
   @override
   _AnimeListByGenreState createState() => _AnimeListByGenreState();
 }
 
 class _AnimeListByGenreState extends State<AnimeListByGenre> {
-  List<Map<String, dynamic>> genres = [];
+  List<Genre> genres = [];
 
   Future<void> fetchAnimeByGenre() async {
     final response =
@@ -19,7 +49,14 @@ class _AnimeListByGenreState extends State<AnimeListByGenre> {
       final genreData = data['data'];
 
       setState(() {
-        genres = List.from(genreData);
+        genres = List.from(genreData.map((genre) => Genre(
+              id: genre['mal_id'],
+              name: genre['name'],
+              url: genre['url'],
+              count: genre['count'],
+              description: genre['description'],
+              image: genre['image'],
+            )));
       });
     } else {
       throw Exception('Failed to load anime by genre');
@@ -44,20 +81,62 @@ class _AnimeListByGenreState extends State<AnimeListByGenre> {
             : ListView.builder(
                 itemCount: genres.length,
                 itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(genres[index]['name']),
-                    onTap: () {
-                      // Aquí puedes navegar a una nueva pantalla para mostrar los animes por género
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AnimeListScreen(
-                            genreId: genres[index]['mal_id'],
-                            genreName: genres[index]['name'],
+                  return Stack(
+                    children: [
+                      Card(
+                        color: Color(0xFFA590A4),
+                        child: ListTile(
+                          title: Text(
+                            genres[index].name,
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Descripción: ${genres[index].description ?? 'Descripción no disponible'}',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              Text(
+                                'ID: ${genres[index].id.toString()}',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ],
+                          ),
+                          leading: genres[index].image != null
+                              ? Image.network(genres[index].image!)
+                              : Icon(Icons.image_not_supported),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => AnimeListScreen(
+                                  genreId: genres[index].id,
+                                  genreName: genres[index].name,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      Positioned(
+                        top: 0,
+                        right: 0,
+                        child: Card(
+                          color: Color(0xFFAEA3B0),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              'Animes: ${genres[index].count.toString()}',
+                              style: TextStyle(
+                                color: Color.fromARGB(255, 239, 239, 238),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
                         ),
-                      );
-                    },
+                      ),
+                    ],
                   );
                 },
               ),
@@ -77,7 +156,7 @@ class AnimeListScreen extends StatefulWidget {
 }
 
 class _AnimeListScreenState extends State<AnimeListScreen> {
-  List<Map<String, dynamic>> animeList = [];
+  List<Anime> animeList = [];
 
   Future<void> fetchAnimeListByGenre(int genreId) async {
     final response = await http
@@ -88,7 +167,11 @@ class _AnimeListScreenState extends State<AnimeListScreen> {
       final animeData = data['data'];
 
       setState(() {
-        animeList = List.from(animeData);
+        animeList = List.from(animeData.map((anime) => Anime(
+              malId: anime['mal_id'],
+              name: anime['name'],
+              description: anime['description'],
+            )));
       });
     } else {
       throw Exception('Failed to load anime list by genre');
@@ -114,11 +197,20 @@ class _AnimeListScreenState extends State<AnimeListScreen> {
                 itemCount: animeList.length,
                 itemBuilder: (context, index) {
                   return ListTile(
-                    title: Text(animeList[index]['name']),
+                    title: Text(animeList[index].name),
+                    subtitle: Text(animeList[index].description ??
+                        'Descripción no disponible'),
                   );
                 },
               ),
       ),
     );
   }
+}
+
+void main() {
+  runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: AnimeListByGenre(),
+  ));
 }

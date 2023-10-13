@@ -91,31 +91,47 @@ class _AnimeCharacterSearchState extends State<AnimeCharacterSearch> {
               if (selectedCharacter.isNotEmpty)
                 Card(
                   color: Color(0xFFA590A4),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Card(
-                      color: Color(0xFFAEA3B0),
-                      child: Padding(
+                  child: Stack(
+                    children: [
+                      Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              selectedCharacter['name'],
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
+                        child: Card(
+                          color: Color(0xFFAEA3B0),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  selectedCharacter['name'],
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(height: 8),
+                                Text(
+                                  selectedCharacter['about'],
+                                  style: TextStyle(fontSize: 14),
+                                ),
+                              ],
                             ),
-                            SizedBox(height: 8),
-                            Text(
-                              selectedCharacter['about'],
-                              style: TextStyle(fontSize: 14),
-                            ),
-                          ],
+                          ),
                         ),
                       ),
-                    ),
+                      Positioned(
+                        bottom: -10,
+                        right: -10,
+                        child: Container(
+                          width: 200,
+                          height: 200,
+                          decoration: BoxDecoration(
+                            color: Colors.black.withOpacity(0.1),
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
             ],
